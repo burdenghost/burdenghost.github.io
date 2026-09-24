@@ -24,18 +24,24 @@ document.getElementById('year').textContent=new Date().getFullYear();
  const key='burdenGhostLanguage';
  const saved=localStorage.getItem(key);
  const browserLang=(navigator.language||'en').toLowerCase();
- let lang=saved || (browserLang.startsWith('es') ? 'es' : 'en');
- function setLanguage(next){
-   lang=next; localStorage.setItem(key,lang);
+ let lang=(saved==='en'||saved==='es') ? saved : (browserLang.startsWith('es') ? 'es' : 'en');
+
+ function setLanguage(next,remember=true){
+   lang=(next==='es')?'es':'en';
+   if(remember) localStorage.setItem(key,lang);
    document.documentElement.lang=lang;
    document.querySelectorAll('[data-en][data-es]').forEach(el=>{
-     el.innerHTML=el.dataset[lang];
+     el.innerHTML=lang==='es' ? el.dataset.es : el.dataset.en;
    });
    const button=document.getElementById('langToggle');
-   button.textContent=lang==='en'?'ES':'EN';
-   button.setAttribute('aria-label',lang==='en'?'Cambiar a español':'Switch to English');
+   if(button){
+     button.textContent=lang==='en'?'ES':'EN';
+     button.setAttribute('aria-label',lang==='en'?'Cambiar a español':'Switch to English');
+     button.setAttribute('title',lang==='en'?'Cambiar a español':'Switch to English');
+   }
  }
- document.getElementById('langToggle').addEventListener('click',()=>setLanguage(lang==='en'?'es':'en'));
- setLanguage(lang);
-})();
+ const button=document.getElementById('langToggle');
+ if(button) button.addEventListener('click',()=>setLanguage(lang==='en'?'es':'en',true));
+ setLanguage(lang,false);
+})(); 
 </script></body></html>
