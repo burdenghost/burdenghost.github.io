@@ -174,3 +174,45 @@ footer{font-size:.78rem!important}
   .tagline,.player-copy,.cards p,.about>div:last-child p,.signal>div:last-child p,.press-copy p,
   .press-contact>p:not(.eyebrow),.contact-copy,.thank-you p:not(.eyebrow){font-size:.96rem!important}
 }
+
+/* FINAL TYPOGRAPHY + MOBILE WORDMARK FIT — only BURDEN GHOST stays gothic */
+body *{
+  font-family:"BlackChancery",cursive!important;
+}
+.brand,.logo-title{
+  font-family:var(--gothic)!important;
+}
+.brand span,.logo-title span{
+  font-family:inherit!important;
+}
+.logo-title{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+  font-size:clamp(3.2rem,12vw,10.5rem)!important;
+  line-height:.72!important;
+  letter-spacing:0!important;
+  white-space:normal!important;
+  transform:scaleX(.68)!important;
+  transform-origin:left center!important;
+}
+.logo-title span{
+  display:block!important;
+  white-space:nowrap!important;
+}
+.logo-title:after{
+  font-family:var(--display)!important;
+}
+@media(max-width:800px){
+  .hero-logo{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+  .logo-title{
+    font-size:clamp(2.7rem,15vw,6.5rem)!important;
+    transform:scaleX(.62)!important;
+    transform-origin:left center!important;
+  }
+}
