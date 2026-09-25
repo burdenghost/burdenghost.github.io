@@ -80,3 +80,42 @@ footer{padding:35px 10vw;color:#555;font:500 .72rem var(--body);letter-spacing:.
  .brand span:first-child{font-size:.78rem}.brand span:last-child{font-size:.94rem}
  .hero-logo:before{left:-18px}.hero{padding:18vw 7vw}
 }
+
+
+/* FINAL READABILITY PASS — keep BURDEN GHOST gothic, brighten music cards */
+.logo-title,.brand,.press-hero h1,.thank-you h1,h1,h2,h3{
+  font-family:var(--gothic)!important;
+}
+.logo-title{
+  font-weight:700!important;
+  text-shadow:0 2px 0 #000,0 0 18px #777!important;
+}
+.cards article{
+  background:linear-gradient(145deg,#242424,#101010)!important;
+  border-color:#505050!important;
+  box-shadow:inset 0 0 35px #000,0 25px 70px #000!important;
+}
+.cards article:before{
+  border-color:#3a3a3a!important;
+}
+.cards small{
+  color:#aaa!important;
+  font-weight:600!important;
+}
+.cards h3{
+  color:#f2f2f2!important;
+}
+.cards p{
+  color:#c2c2c2!important;
+  font-weight:400!important;
+}
+.cards a{
+  color:#f2f2f2!important;
+}
+#music{
+  background:linear-gradient(180deg,#0d0d0d,#080808)!important;
+}
+.spotify-player{
+  background:#101010!important;
+  border-color:#555!important;
+}
