@@ -168,3 +168,25 @@ nav a{font-family:Cinzel,serif!important;font-weight:600!important;letter-spacin
  nav a{font-size:.53rem!important;letter-spacing:.05em!important}
  .brand{font-size:1.05rem!important}
 }
+
+/* OLD ENGLISH SITE-WIDE TYPOGRAPHY */
+body{
+  font-family:"UnifrakturCook","Old English Text MT","Blackletter",serif;
+}
+nav a,.lang-switch,.listen-label small,.listen-platforms a,.links a,.btn,.eyebrow,.signal-note,.form-row label,footer{
+  font-family:"UnifrakturCook","Old English Text MT","Blackletter",serif!important;
+  text-transform:none!important;
+  letter-spacing:.035em!important;
+}
+.tagline,.player-copy,.cards p,.about>div:last-child p,.signal>div:last-child p,.press-copy p,.press-contact>p:not(.eyebrow),.contact-copy,.form-note,.contact-status,.press-footnote{
+  font-family:"UnifrakturCook","Old English Text MT","Blackletter",serif;
+}
+.listen-label small{font-size:.72rem!important;color:#777}
+nav a{font-size:.78rem!important}
+.btn{font-size:.82rem!important}
+.form-row label{font-size:.72rem!important}
+footer{font-size:.68rem!important}
+@media(max-width:800px){
+  nav a{font-size:.62rem!important}
+  .tagline,.player-copy,.cards p,.about>div:last-child p,.signal>div:last-child p,.press-copy p,.press-contact>p:not(.eyebrow),.contact-copy,.form-note,.contact-status{font-size:.9rem}
+}
