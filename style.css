@@ -119,3 +119,58 @@ footer{padding:35px 10vw;color:#555;font:500 .72rem var(--body);letter-spacing:.
   background:#101010!important;
   border-color:#555!important;
 }
+
+
+/* BLACK CHANCERY SITE-WIDE — BURDEN GHOST identity stays gothic */
+@import url('https://fonts.cdnfonts.com/css/black-chancery');
+
+body,
+nav a,.lang-switch,.listen-label small,.listen-platforms a,.links a,.btn,.eyebrow,
+.tagline,.player-copy,.cards small,.cards p,.cards a,.about>div:last-child p,
+.signal>div:last-child p,.signal-note,.press-copy p,.press-contact>p:not(.eyebrow),
+.contact-copy,.form-row label,.form-note,.contact-status,.press-footnote,
+.highlight-grid span,.release-list span,.release-list em,footer{
+  font-family:"BlackChancery",cursive!important;
+}
+h1,h2,h3{
+  font-family:"BlackChancery",cursive!important;
+  font-weight:400!important;
+  letter-spacing:.01em!important;
+}
+nav a{font-size:.92rem!important;letter-spacing:.035em!important;text-transform:none!important}
+.lang-switch{font-size:.88rem!important}
+.listen-platforms a,.links a,.btn{font-size:.92rem!important;letter-spacing:.025em!important;text-transform:none!important}
+.eyebrow{font-size:.82rem!important;letter-spacing:.08em!important;text-transform:none!important}
+.tagline,.player-copy,.cards p,.about>div:last-child p,.signal>div:last-child p,.press-copy p,
+.press-contact>p:not(.eyebrow),.contact-copy,.thank-you p:not(.eyebrow){
+  font-size:1.05rem!important;
+  line-height:1.6!important;
+}
+.cards h3{font-size:1.65rem!important}
+.form-row label{font-size:.82rem!important;text-transform:none!important}
+footer{font-size:.78rem!important}
+.highlight-grid strong,.release-list strong{
+  font-family:"BlackChancery",cursive!important;
+  font-weight:400!important;
+}
+
+/* Keep only the BURDEN GHOST wordmark in its original blackletter */
+.brand,.logo-title,.press-hero h1{
+  font-family:var(--gothic)!important;
+  font-weight:700!important;
+}
+.logo-title{
+  font-size:clamp(4.2rem,12vw,10.5rem)!important;
+  line-height:.72!important;
+  white-space:nowrap;
+  transform:scaleX(.88);
+  transform-origin:left center;
+}
+.brand{white-space:nowrap}
+.brand span{white-space:nowrap}
+@media(max-width:800px){
+  .logo-title{font-size:clamp(3.4rem,18vw,6.8rem)!important;transform:scaleX(.82)}
+  nav a{font-size:.72rem!important}
+  .tagline,.player-copy,.cards p,.about>div:last-child p,.signal>div:last-child p,.press-copy p,
+  .press-contact>p:not(.eyebrow),.contact-copy,.thank-you p:not(.eyebrow){font-size:.96rem!important}
+}
