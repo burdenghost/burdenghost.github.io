@@ -216,3 +216,29 @@ body *{
     transform-origin:left center!important;
   }
 }
+
+/* MOBILE WORDMARK — fit naturally inside the viewport */
+@media(max-width:800px){
+  .hero-logo{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+  .logo-title{
+    width:auto!important;
+    max-width:100%!important;
+    font-size:clamp(2.25rem,10vw,5.5rem)!important;
+    line-height:.72!important;
+    letter-spacing:-.015em!important;
+    white-space:normal!important;
+    transform:none!important;
+    overflow:visible!important;
+  }
+  .logo-title span{
+    display:block!important;
+    width:max-content!important;
+    max-width:100%!important;
+    white-space:nowrap!important;
+  }
+}
