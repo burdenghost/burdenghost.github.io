@@ -23,8 +23,8 @@ nav a:hover{color:#fff;text-shadow:0 0 12px #fff}
 .listen-platforms a:hover,.links a:hover{background:#eee;color:#050505;border-color:#eee;transform:translateY(-1px)}
 .listen-platforms a img,.links a img{width:17px;height:17px;display:block;flex:none}.listen-platforms a:hover img,.links a:hover img{filter:invert(1)}
 .hero,.press-hero{min-height:calc(100vh - 76px);padding:9vw 10vw;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;isolation:isolate;background-position:center;background-repeat:no-repeat}
-.hero{align-items:flex-start;background-image:linear-gradient(90deg,rgba(5,5,5,.9),rgba(5,5,5,.56) 45%,rgba(5,5,5,.8)),url("https://raw.githubusercontent.com/burdenghost/burdenghost.github.io/1a69560dc4996df835ebe25d398fc772d521ab0f/file_00000000a00081f7a5b32354f52d0c0a.png");background-size:min(82vw,82vh) auto}
-.press-hero{min-height:72vh;background-image:linear-gradient(90deg,rgba(5,5,5,.93),rgba(5,5,5,.65)),url("https://raw.githubusercontent.com/burdenghost/burdenghost.github.io/1a69560dc4996df835ebe25d398fc772d521ab0f/file_00000000a00081f7a5b32354f52d0c0a.png");background-size:min(70vw,70vh) auto;background-position:center right}
+.hero{align-items:flex-start;background-image:radial-gradient(circle at 50% 42%,#242424 0,#0c0c0c 32%,#050505 72%);background-size:min(82vw,82vh) auto}
+.press-hero{min-height:72vh;background-image:radial-gradient(circle at 70% 45%,#242424 0,#0b0b0b 34%,#050505 75%);background-size:min(70vw,70vh) auto;background-position:center right}
 .hero:after,.press-hero:after{content:"";position:absolute;width:55vw;height:55vw;border:1px solid #333;border-radius:50%;right:-22vw;top:8%;box-shadow:0 0 120px #000 inset;z-index:-1}
 .hero:before,.press-hero:before{content:"BURDEN GHOST";position:absolute;z-index:-1;left:-5vw;bottom:-7vw;font-family:var(--gothic);font-size:clamp(8rem,20vw,22rem);line-height:.65;color:#fff;opacity:.035;white-space:nowrap;transform:rotate(-5deg);pointer-events:none}
 .hero>div:first-child,.press-hero>*{position:relative;z-index:2}
@@ -75,3 +75,16 @@ footer{padding:35px 10vw;color:#555;font-family:var(--display);font-size:.58rem;
  .thank-you{padding:18vw 7vw}.thank-you h1{font-size:clamp(3.5rem,18vw,7rem)!important}
  .brand span:first-child{font-size:.78rem}.brand span:last-child{font-size:.94rem}
 }
+
+/* Pure BURDEN GHOST artwork-inspired treatment — no image used */
+.hero,.press-hero{background-image:radial-gradient(circle at 50% 42%,#242424 0,#0c0c0c 32%,#050505 72%)!important}
+.hero:before,.press-hero:before{opacity:.055!important;color:#bdbdbd!important;text-shadow:0 0 30px #fff}
+.hero:after,.press-hero:after{border-color:#444!important;opacity:.65}
+.hero-logo{position:relative}
+.hero-logo:after{content:"⛓";display:block;margin:26px 0 0 8px;font:700 1.4rem/1 var(--gothic);letter-spacing:.55em;color:#555;opacity:.65}
+.logo-title span:first-child,.logo-title span:last-child{display:block}
+.logo-title span:last-child{margin-top:.03em}
+section:not(.hero):after{content:"⛓ ✦ ⛓";font-family:var(--display);letter-spacing:.35em}
+.listen-bar{border-top:1px solid #1f1f1f}
+.cards article,.highlight-grid article{position:relative}
+.cards article:before,.highlight-grid article:before{content:"";position:absolute;inset:8px;border:1px solid #202020;pointer-events:none}
