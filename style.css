@@ -38,3 +38,17 @@
     background-size:auto 100%;
   }
 }
+
+/* Fit the full BURDEN GHOST artwork without cropping */
+.hero{
+  background-size:min(82vw,82vh) auto;
+  background-position:center center;
+  background-repeat:no-repeat;
+}
+@media(max-width:800px){
+  .hero{
+    min-height:calc(100svh - 76px);
+    background-size:92vw auto;
+    background-position:center center;
+  }
+}
