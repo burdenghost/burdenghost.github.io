@@ -242,3 +242,10 @@ body *{
     white-space:nowrap!important;
   }
 }
+
+/* PRESS KIT MEDIA RESOURCES */
+.press-media-grid{display:grid;grid-template-columns:minmax(260px,.8fr) 1.2fr;gap:7vw;align-items:center}
+.press-photo-card{background:#090909;border:1px solid #414141;padding:10px;box-shadow:0 25px 70px #000}
+.press-photo-card .artist-photo{width:100%;max-width:none;aspect-ratio:4/5}
+.press-media .press-copy{max-width:760px}
+@media(max-width:800px){.press-media-grid{grid-template-columns:1fr;gap:35px}.press-photo-card .artist-photo{max-height:520px}}
