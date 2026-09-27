@@ -69,6 +69,7 @@ formspree('initForm',{
 });
 </script>
 <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+<script>
 (function(){
  const key='burdenGhostLanguage';
  const saved=localStorage.getItem(key);
@@ -92,5 +93,5 @@ formspree('initForm',{
  const button=document.getElementById('langToggle');
  if(button) button.addEventListener('click',()=>setLanguage(lang==='en'?'es':'en',true));
  setLanguage(lang,false);
-})(); 
+})();
 </script></body></html>
