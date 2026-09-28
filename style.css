@@ -200,3 +200,50 @@ footer{font-size:.72rem!important}
 .press-photo-card .artist-photo{width:100%;max-width:none;aspect-ratio:4/5}
 .press-media .press-copy{max-width:760px}
 @media(max-width:800px){.press-media-grid{grid-template-columns:1fr;gap:35px}.press-photo-card .artist-photo{max-height:520px}}
+
+
+/* MOBILE INDUSTRY NAV — compact, clean, and readable */
+@media (max-width: 800px){
+  header{
+    height:64px;
+    padding:0 3.5vw;
+    gap:10px;
+    overflow:hidden;
+  }
+  .brand{
+    flex:0 0 auto;
+    font-size:.78rem!important;
+    line-height:.58;
+    gap:1px;
+  }
+  .brand span:first-child{font-size:.62rem!important}
+  .brand span:last-child{font-size:.78rem!important}
+  nav{
+    flex:1 1 auto;
+    min-width:0;
+    justify-content:flex-end;
+    gap:clamp(5px,1.8vw,9px);
+    white-space:nowrap;
+  }
+  nav a{
+    flex:0 0 auto;
+    font-size:clamp(.58rem,2.45vw,.68rem)!important;
+    letter-spacing:.035em!important;
+    line-height:1;
+  }
+  nav a:nth-child(3){display:none!important;} /* Press Kit remains accessible from the page, not the cramped mobile header */
+  .lang-switch{
+    flex:0 0 auto;
+    padding:5px 6px!important;
+    min-width:25px;
+    font-size:.62rem!important;
+    letter-spacing:.04em!important;
+    line-height:1;
+  }
+}
+@media (max-width:360px){
+  header{padding:0 3vw}
+  nav{gap:5px}
+  nav a{font-size:.57rem!important}
+  .lang-switch{padding:5px!important;min-width:24px}
+}
