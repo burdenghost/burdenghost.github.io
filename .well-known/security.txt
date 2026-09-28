@@ -1,0 +1,5 @@
+Contact: https://burdenghost.com/#contact
+Policy: https://github.com/burdenghost/burdenghost.github.io/blob/main/SECURITY.md
+Canonical: https://burdenghost.com/.well-known/security.txt
+Preferred-Languages: en, es
+Expires: 2027-09-28T00:00:00.000Z
