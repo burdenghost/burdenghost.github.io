@@ -1,3 +1,4 @@
+@import url('https://fonts.cdnfonts.com/css/black-chancery');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600&family=UnifrakturCook:wght@700&display=swap');
 @import url('https://fonts.cdnfonts.com/css/rademos');
 
@@ -122,7 +123,6 @@ footer{padding:35px 10vw;color:#555;font:500 .72rem var(--body);letter-spacing:.
 
 
 /* BLACK CHANCERY SITE-WIDE — BURDEN GHOST identity stays gothic */
-@import url('https://fonts.cdnfonts.com/css/black-chancery');
 
 body,
 nav a,.lang-switch,.listen-label small,.listen-platforms a,.links a,.btn,.eyebrow,
