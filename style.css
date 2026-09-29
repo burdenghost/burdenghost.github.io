@@ -249,9 +249,9 @@ footer{font-size:.72rem!important}
 }
 
 /* UPCOMING ALBUM + LATEST RELEASES */
-.album-feature{display:grid;grid-template-columns:minmax(300px,.9fr) 1.1fr;gap:clamp(40px,6vw,90px);align-items:center;margin:0 0 55px;padding:clamp(32px,5vw,64px);background:radial-gradient(circle at 24% 50%,#222 0,#101010 34%,#070707 72%),#090909;border:1px solid #414141;box-shadow:inset 0 0 80px #000,0 30px 90px #000;position:relative;overflow:hidden}
+.album-feature{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center;margin:0 0 55px;padding:clamp(28px,4vw,54px);background:radial-gradient(circle at 24% 50%,#222 0,#101010 34%,#070707 72%),#090909;border:1px solid #414141;box-shadow:inset 0 0 80px #000,0 30px 90px #000;position:relative;overflow:hidden}
 .album-feature:before{content:"";position:absolute;inset:12px;border:1px solid #292929;pointer-events:none}
-.album-art{width:clamp(300px,34vw,420px);aspect-ratio:1;margin:auto;background:#050505;box-shadow:0 24px 65px #000;position:relative;overflow:hidden}.album-art img{display:block;width:100%;height:100%;object-fit:contain}
+.album-art{width:min(100%,420px);aspect-ratio:1;margin:auto;background:#050505;box-shadow:0 24px 65px #000;position:relative;overflow:hidden}.album-art img{display:block;width:100%;height:100%;object-fit:cover}
 .album-ring{position:absolute;inset:13%;border:1px solid #777;border-radius:50%;box-shadow:0 0 30px #888,inset 0 0 30px #000}
 .album-core{position:relative;z-index:2;text-align:center;font:700 clamp(2.4rem,5vw,4.5rem)/.78 var(--display);letter-spacing:.08em;color:#eee;text-shadow:0 2px 12px #000}
 .album-core small{font:600 .45em var(--display);letter-spacing:.35em;color:#888}
@@ -261,4 +261,4 @@ footer{font-size:.72rem!important}
 .album-copy p:not(.album-kicker){color:#c2c2c2;max-width:650px;font:400 1rem/1.7 "Inter",Arial,sans-serif}
 .album-status{display:inline-block;margin-top:12px;padding:8px 12px;border:1px solid #555;color:#eee;font:600 .72rem/1 "Inter",Arial,sans-serif;letter-spacing:.15em}
 .release-new{border-color:#666!important}.release-new small{color:#c2c2c2!important}
-@media(max-width:800px){.album-feature{grid-template-columns:1fr;gap:34px;padding:28px 20px;margin-bottom:40px}.album-art{width:min(360px,84vw)}.album-copy{text-align:left}.album-copy h3{font-size:clamp(2.3rem,12vw,4rem)!important}}
+@media(max-width:800px){.album-feature{grid-template-columns:1fr;gap:28px;padding:24px 16px;margin-bottom:40px}.album-art{width:min(280px,72vw);max-width:280px}.album-copy{text-align:left}.album-copy h3{font-size:clamp(2.2rem,10vw,3.5rem)!important}}
