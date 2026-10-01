@@ -1,5 +1,5 @@
 @import url('https://fonts.cdnfonts.com/css/metal-lord');
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600&family=UnifrakturCook:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600&family=UnifrakturCook:wght@700&display=swap');
 
 :root{--bg:#050505;--panel:#0b0b0b;--panel2:#111;--text:#f2f2f2;--muted:#9a9a9a;--dim:#5e5e5e;--line:#292929;--ghost:#d7d7d7;--gothic:"UnifrakturCook","Old English Text MT","Blackletter",serif;--display:Cinzel,serif;--body:"Barlow Condensed",Arial,sans-serif}
 *{box-sizing:border-box}
