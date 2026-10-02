@@ -1,59 +1,90 @@
 // BURDEN GHOST site behavior. Kept in a same-origin file so CSP can disallow inline scripts.
 (function () {
   'use strict';
+
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
   const form = document.getElementById('contact-form');
   const started = document.getElementById('form-started');
   const status = document.getElementById('contact-status');
+
+  function setStatus(message) {
+    if (status) status.textContent = message;
+  }
+
+  function setSubmitState(button, submitting, language) {
+    if (!button) return;
+    button.disabled = submitting;
+    button.setAttribute('aria-disabled', String(submitting));
+    button.textContent = submitting
+      ? (language === 'es' ? 'ENVIANDO...' : 'SENDING...')
+      : (language === 'es' ? 'ENVIAR MENSAJE' : 'SEND MESSAGE');
+  }
+
   if (form && started) {
     const startTime = Date.now();
     started.value = String(startTime);
-    form.addEventListener('submit', function (event) {
+
+    form.addEventListener('submit', async function (event) {
+      const language = document.documentElement.lang === 'es' ? 'es' : 'en';
+      const button = form.querySelector('button[type="submit"]');
+
       if (Date.now() - startTime < 2500) {
         event.preventDefault();
-        if (status) status.textContent = document.documentElement.lang === 'es'
+        setStatus(language === 'es'
           ? 'Espera un momento antes de enviar el mensaje.'
-          : 'Please wait a moment before sending your message.';
+          : 'Please wait a moment before sending your message.');
         return;
       }
+
       const token = form.querySelector('input[name="cf-turnstile-response"]')?.value;
       if (!token) {
         event.preventDefault();
-        if (status) status.textContent = document.documentElement.lang === 'es'
+        setStatus(language === 'es'
           ? 'Completa la verificación de seguridad antes de enviar.'
-          : 'Please complete the security verification before sending.';
+          : 'Please complete the security verification before sending.');
+        return;
       }
-    });
 
-    window.formspree = window.formspree || function () {
-      (window.formspree.q = window.formspree.q || []).push(arguments);
-    };
-    window.formspree('initForm', {
-      formElement: '#contact-form',
-      formId: 'mgavzzyq',
-      onSubmit: ({ form: submittedForm }) => {
-        const message = document.getElementById('contact-status');
-        if (message) message.textContent = document.documentElement.lang === 'es'
-          ? 'Enviando tu mensaje...' : 'Sending your message...';
-        const button = submittedForm.querySelector('button[type="submit"]');
-        if (button) button.textContent = document.documentElement.lang === 'es' ? 'ENVIANDO...' : 'SENDING...';
-      },
-      onSuccess: () => { window.location.href = 'thank-you.html'; },
-      onError: ({ form: submittedForm }, error) => {
-        const message = document.getElementById('contact-status');
-        if (message) message.textContent = error?.message || (document.documentElement.lang === 'es'
-          ? 'Revisa los campos del formulario.' : 'Please check the form fields.');
-      },
-      onFailure: () => {
-        const message = document.getElementById('contact-status');
-        if (message) message.textContent = document.documentElement.lang === 'es'
+      // Use Formspree directly from the native form data. This removes the
+      // third-party @formspree/ajax runtime while retaining Turnstile support.
+      event.preventDefault();
+      if (button?.disabled) return;
+
+      setSubmitState(button, true, language);
+      setStatus(language === 'es' ? 'Enviando tu mensaje...' : 'Sending your message...');
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+          credentials: 'omit'
+        });
+
+        let result = null;
+        try {
+          result = await response.json();
+        } catch (_) {}
+
+        if (!response.ok) {
+          const errorMessage = result?.errors?.map(error => error.message).filter(Boolean).join(' ')
+            || (language === 'es'
+              ? 'No se pudo enviar el mensaje. Revisa los campos e inténtalo de nuevo.'
+              : 'The message could not be sent. Please check the fields and try again.');
+          throw new Error(errorMessage);
+        }
+
+        window.location.href = 'thank-you.html';
+      } catch (error) {
+        setStatus(error?.message || (language === 'es'
           ? 'No se pudo enviar el mensaje. Inténtalo de nuevo.'
-          : 'The message could not be sent. Please try again.';
-        if (window.turnstile && typeof window.turnstile.reset === 'function') window.turnstile.reset();
-        const button = document.querySelector('#contact-form button[type="submit"]');
-        if (button) button.textContent = document.documentElement.lang === 'es' ? 'ENVIAR MENSAJE' : 'SEND MESSAGE';
+          : 'The message could not be sent. Please try again.'));
+        setSubmitState(button, false, language);
+        if (window.turnstile && typeof window.turnstile.reset === 'function') {
+          window.turnstile.reset();
+        }
       }
     });
   }
@@ -97,6 +128,7 @@
         button.setAttribute('title', language === 'en' ? 'Cambiar a español' : 'Switch to English');
       }
     }
+
     const button = document.getElementById('langToggle');
     if (button) button.addEventListener('click', () => setLanguage(language === 'en' ? 'es' : 'en', true));
     setLanguage(language, false);
