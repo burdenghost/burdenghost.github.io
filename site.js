@@ -1,5 +1,6 @@
 // BURDEN GHOST site behavior. Kept in a same-origin file so CSP can disallow inline scripts.
 (function () {
+  'use strict';
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
@@ -65,6 +66,21 @@
     let language = (savedLanguage === 'en' || savedLanguage === 'es')
       ? savedLanguage : (browserLanguage.startsWith('es') ? 'es' : 'en');
 
+    function setLocalizedContent(element, value) {
+      // Translation strings are site-authored data. Build the DOM explicitly so
+      // future changes cannot accidentally turn a translation value into HTML.
+      const fragment = document.createDocumentFragment();
+      const parts = String(value).split(/(<br\\s*\\/?>)/gi);
+      for (const part of parts) {
+        if (/^<br\\s*\\/?>$/i.test(part)) {
+          fragment.appendChild(document.createElement('br'));
+        } else if (part) {
+          fragment.appendChild(document.createTextNode(part));
+        }
+      }
+      element.replaceChildren(fragment);
+    }
+
     function setLanguage(next, remember = true) {
       language = next === 'es' ? 'es' : 'en';
       if (remember) {
@@ -72,7 +88,7 @@
       }
       document.documentElement.lang = language;
       document.querySelectorAll('[data-en][data-es]').forEach(element => {
-        element.innerHTML = language === 'es' ? element.dataset.es : element.dataset.en;
+        setLocalizedContent(element, language === 'es' ? element.dataset.es : element.dataset.en);
       });
       const button = document.getElementById('langToggle');
       if (button) {
