@@ -70,9 +70,9 @@
       // Translation strings are site-authored data. Build the DOM explicitly so
       // future changes cannot accidentally turn a translation value into HTML.
       const fragment = document.createDocumentFragment();
-      const parts = String(value).split(/(<br\\s*\\/?>)/gi);
+      const parts = String(value).split(/(<br\s*\/?>)/gi);
       for (const part of parts) {
-        if (/^<br\\s*\\/?>$/i.test(part)) {
+        if (/^<br\s*\/?>$/i.test(part)) {
           fragment.appendChild(document.createElement('br'));
         } else if (part) {
           fragment.appendChild(document.createTextNode(part));
