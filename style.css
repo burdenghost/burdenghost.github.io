@@ -263,22 +263,24 @@ footer{font-size:.72rem!important}
 @media(max-width:800px){.album-feature{grid-template-columns:1fr;gap:24px;padding:22px 16px 28px;margin-bottom:40px}.album-art{width:min(240px,62vw);max-width:240px}.album-copy{text-align:left}.album-copy h3{font-size:clamp(2.1rem,9vw,3.3rem)!important}}
 
 
-/* PRESS KIT METRICS — compact editorial cards */
+/* PRESS KIT METRICS — balanced editorial grid: 3 desktop / 2 mobile */
 .press-highlights .highlight-grid{
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
 }
 .press-highlights .highlight-grid article{
-  min-height:150px;
+  min-height:148px;
   padding:22px;
   justify-content:center;
+  align-items:center;
+  text-align:center;
   box-shadow:inset 0 0 30px #000,0 16px 45px #000;
 }
 .press-highlights .highlight-grid article:before{
   inset:7px;
 }
 .press-highlights .highlight-grid strong{
-  font-size:clamp(2rem,3vw,2.8rem);
+  font-size:clamp(2rem,3vw,2.75rem);
   line-height:1;
   margin-bottom:10px;
   word-break:break-word;
@@ -288,6 +290,9 @@ footer{font-size:.72rem!important}
   line-height:1.4;
   max-width:22ch;
 }
+.press-highlights .highlight-grid article:last-child{
+  grid-column:2;
+}
 @media(max-width:800px){
   .press-highlights .highlight-grid{
     grid-template-columns:repeat(2,minmax(0,1fr));
@@ -296,6 +301,9 @@ footer{font-size:.72rem!important}
   .press-highlights .highlight-grid article{
     min-height:125px;
     padding:18px 16px;
+  }
+  .press-highlights .highlight-grid article:last-child{
+    grid-column:auto;
   }
   .press-highlights .highlight-grid strong{
     font-size:clamp(1.7rem,7vw,2.25rem);
