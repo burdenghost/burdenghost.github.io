@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark"><meta name="referrer" content="no-referrer">
+<title>BURDEN GHOST — Video Lab</title>
+<style>
+:root{color-scheme:dark;--bg:#08080b;--panel:#111116;--line:#2b2932;--text:#f4f0f4;--muted:#aaa2af;--accent:#e33c53}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#29121a 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}header{padding:24px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}header strong{letter-spacing:.16em;font-size:14px}header span{color:var(--muted);font-size:12px;letter-spacing:.12em}.wrap{max-width:1440px;margin:auto;padding:clamp(16px,3vw,36px);display:grid;grid-template-columns:minmax(280px,370px) minmax(0,1fr);gap:28px}.panel{background:linear-gradient(160deg,#15141a,#0e0e12);border:1px solid var(--line);border-radius:16px;padding:22px}.panel h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 18px}.field{display:grid;gap:7px;margin:15px 0}.field label{color:#d5cdd7;font-size:13px}.field input[type=text],.field textarea,select{width:100%;background:#09090c;color:var(--text);border:1px solid #39343f;border-radius:9px;padding:11px;font:inherit}.field textarea{min-height:120px;resize:vertical}.field input[type=file]{font-size:12px;max-width:100%;color:var(--muted)}.hint{font-size:12px;color:var(--muted)}.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:1px solid #49404a;border-radius:9px;padding:10px 14px;color:var(--text);background:#201b23;font:600 13px system-ui;cursor:pointer}button.primary{background:var(--accent);border-color:var(--accent);color:white}button:disabled{opacity:.4;cursor:not-allowed}.stage{min-width:0}.preview-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.preview-head h1{font-size:clamp(20px,3vw,30px);margin:0;letter-spacing:-.03em}.pill{border:1px solid #49404a;color:#d5cdd7;border-radius:100px;padding:5px 10px;font-size:11px}.canvas-wrap{display:grid;place-items:center;padding:18px;background:#050507;border:1px solid var(--line);border-radius:16px;min-height:300px}.canvas-wrap canvas{width:100%;max-height:70vh;object-fit:contain;aspect-ratio:16/9;background:#08080b;border-radius:6px}.status{min-height:24px;color:var(--muted);font-size:12px;margin-top:10px}.transport{display:flex;align-items:center;gap:12px;margin-top:16px}.transport audio{width:100%;height:38px}.foot{color:#77717c;font-size:11px;margin-top:18px}.lyrics{min-height:36px;text-align:center;margin:18px 0 0;font-size:clamp(17px,2.3vw,27px);font-weight:750;text-shadow:0 2px 18px #000;letter-spacing:.015em}.meter{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;margin-top:12px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.stage{grid-row:1}.panel{padding:17px}.canvas-wrap{min-height:180px;padding:8px}}
+</style>
+</head>
+<body>
+<header><strong>BURDEN GHOST <span> / VIDEO LAB</span></strong><span>LOCAL PREVIEW · NO UPLOAD</span></header>
+<main class="wrap">
+<section class="panel">
+<h2>Build your visual</h2>
+<div class="field"><label for="track">Audio file</label><input id="track" type="file" accept="audio/*"><div class="hint">Audio stays on your device for preview.</div></div>
+<div class="field"><label for="art">Cover artwork (optional)</label><input id="art" type="file" accept="image/*"></div>
+<div class="field"><label for="title">Artist / track title</label><input id="title" type="text" value="BURDEN GHOST" maxlength="90"></div>
+<div class="field"><label for="look">Visual style</label><select id="look"><option value="wave">Crimson waveform</option><option value="spectrum">Spectral bars</option><option value="pulse">Cathedral pulse</option><option value="embers">Dark embers</option></select></div>
+<div class="field"><label for="ratio">Video format</label><select id="ratio"><option value="landscape">YouTube · 16:9</option><option value="portrait">TikTok / Reels · 9:16</option><option value="square">Square · 1:1</option></select></div>
+<div class="field"><label for="lyrics">Timed lyrics (optional)</label><textarea id="lyrics" placeholder="[00:12.00] Tell me why&#10;[00:16.50] Please tell me why"></textarea><div class="hint">LRC-style timestamps: [mm:ss.xx] lyric line. Lyrics are shown during preview.</div></div>
+<div class="buttons"><button class="primary" id="play" disabled>Play preview</button><button id="stop" disabled>Stop</button><button id="record" disabled>Record WebM</button></div>
+<div class="status" id="status" role="status" aria-live="polite">Choose an audio file to begin.</div>
+<div class="foot">Prototype note: browser export is WebM where supported. Use the GitHub render workflow for final MP4 output. Browser recording runs in real time.</div>
+</section>
+<section class="stage">
+<div class="preview-head"><h1>Make the feeling visible.</h1><span class="pill">PROTOTYPE 0.1</span></div>
+<div class="canvas-wrap"><canvas id="screen" width="1920" height="1080" aria-label="Live audio-reactive video preview"></canvas></div>
+<div class="lyrics" id="lyricLine"></div>
+<div class="transport"><audio id="audio" controls></audio></div>
+<div class="meter"><span id="time">00:00</span><span id="audioState">Waiting for audio</span></div>
+</section>
+</main>
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), canvas=$('screen'),ctx=canvas.getContext('2d');
+const audio=$('audio'), track=$('track'), art=$('art'), play=$('play'), stop=$('stop'), record=$('record');
+let audioUrl=null, artUrl=null, artwork=null, audioCtx=null, analyser=null, source=null, streamDest=null, raf=0, recorder=null, chunks=[], recording=false, started=false;
+const status=t=>$('status').textContent=t;
+function resize(){const r=$('ratio').value;canvas.width=r==='portrait'?1080:r==='square'?1080:1920;canvas.height=r==='portrait'?1920:r==='square'?1080:1080;draw()}
+function format(s){if(!Number.isFinite(s))s=0;return String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.floor(s%60)).padStart(2,'0')}
+function lines(){return $('lyrics').value.split(/\n/).map(line=>{const m=line.match(/^\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]\s*(.*)$/);return m?{t:Number(m[1])*60+Number(m[2])+Number('0.'+(m[3]||'0')),text:m[4]}:null}).filter(Boolean).sort((a,b)=>a.t-b.t)}
+function currentLyric(){const ls=lines();let out='';for(const l of ls){if(l.t<=audio.currentTime)out=l.text;else break}$('lyricLine').textContent=out}
+function initAudio(){if(audioCtx)return;audioCtx=new(window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=2048;analyser.smoothingTimeConstant=.82;source=audioCtx.createMediaElementSource(audio);streamDest=audioCtx.createMediaStreamDestination();source.connect(analyser);analyser.connect(audioCtx.destination);analyser.connect(streamDest)}
+function draw(){const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);ctx.fillStyle='#08080c';ctx.fillRect(0,0,w,h);
+if(artwork){const ar=artwork.width/artwork.height, cr=w/h;let sw,sh,sx,sy;if(ar>cr){sh=artwork.height;sw=sh*cr;sx=(artwork.width-sw)/2;sy=0}else{sw=artwork.width;sh=sw/cr;sx=0;sy=(artwork.height-sh)/2}ctx.globalAlpha=.34;ctx.drawImage(artwork,sx,sy,sw,sh,0,0,w,h);ctx.globalAlpha=1}
+const g=ctx.createRadialGradient(w*.5,h*.5,10,w*.5,h*.5,Math.max(w,h)*.72);g.addColorStop(0,'rgba(90,13,31,.36)');g.addColorStop(1,'rgba(0,0,0,.8)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+let data=new Uint8Array(analyser?analyser.frequencyBinCount:128);if(analyser)analyser.getByteFrequencyData(data);const t=performance.now()/1000, style=$('look').value;
+if(style==='spectrum'){const n=96,bw=w/n;for(let i=0;i<n;i++){const v=(data[Math.floor(i*data.length/n)]||0)/255, bh=Math.max(5,v*h*.42);ctx.fillStyle=i%3===0?'#f04b62':i%3===1?'#a92847':'#6e1834';ctx.fillRect(i*bw,h*.68-bh,bw*.58,bh)}}
+else if(style==='pulse'){for(let i=0;i<7;i++){const r=(.08+i*.075+Math.sin(t*2)*.008)*Math.min(w,h);ctx.beginPath();ctx.ellipse(w/2,h*.48,r,r*.7,0,0,Math.PI*2);ctx.strokeStyle='rgba(231,53,81,'+(0.48-i*.045)+')';ctx.lineWidth=Math.max(2,w*.0014);ctx.stroke()}}
+else if(style==='embers'){for(let i=0;i<110;i++){const x=(Math.sin(i*127.1+t*(.1+(i%5)*.025))*43758.5%1+1)%1*w;const y=(h-((t*(24+i%35)+i*97)%h));const rr=1+(data[i%data.length]||0)/85;ctx.beginPath();ctx.arc(x,y,rr,0,Math.PI*2);ctx.fillStyle='rgba(238,65,82,'+(.18+(i%6)/10)+')';ctx.fill()}}
+else {const mid=h*.57,amp=h*.27;ctx.beginPath();for(let x=0;x<w;x+=3){const idx=Math.floor(x/w*data.length),v=((data[idx]||0)/255-.28);const y=mid+Math.sin(x*.018+t*2.5)*v*amp;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.strokeStyle='#f04b62';ctx.lineWidth=Math.max(2,w*.0018);ctx.shadowColor='#e52d50';ctx.shadowBlur=18;ctx.stroke();ctx.shadowBlur=0;ctx.beginPath();ctx.moveTo(0,mid);ctx.lineTo(w,mid);ctx.strokeStyle='rgba(255,255,255,.15)';ctx.lineWidth=1;ctx.stroke()}
+const pad=w*.07;ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.9)';ctx.font='700 '+Math.round(w*.025)+'px system-ui';ctx.fillText(($('title').value||'BURDEN GHOST').slice(0,70),pad,h*.15);ctx.fillStyle='rgba(255,255,255,.6)';ctx.font='500 '+Math.round(w*.009)+'px system-ui';ctx.fillText('BURDEN GHOST  •  OFFICIAL VISUAL',pad,h*.19);
+ctx.textAlign='center';const ls=lines();let lyric='';for(const l of ls){if(l.t<=audio.currentTime)lyric=l.text;else break}if(lyric){ctx.font='800 '+Math.round(w*.027)+'px system-ui';ctx.lineWidth=5;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.strokeText(lyric,w/2,h*.84,w*.82);ctx.fillStyle='#fff';ctx.fillText(lyric,w/2,h*.84,w*.82)}
+ctx.textAlign='left';ctx.fillStyle='rgba(255,255,255,.45)';ctx.font='500 '+Math.round(w*.008)+'px system-ui';ctx.fillText(format(audio.currentTime),pad,h*.94);
+$('time').textContent=format(audio.currentTime);$('audioState').textContent=audio.paused?'Paused':'Playing';currentLyric();if(recording){ctx.save();ctx.restore()}raf=requestAnimationFrame(draw)}
+track.addEventListener('change',()=>{const f=track.files&&track.files[0];if(!f)return;if(audioUrl)URL.revokeObjectURL(audioUrl);audioUrl=URL.createObjectURL(f);audio.src=audioUrl;play.disabled=false;record.disabled=false;stop.disabled=false;status('Loaded '+f.name+'. Preview is processed locally.');$('audioState').textContent='Ready';});
+art.addEventListener('change',()=>{const f=art.files&&art.files[0];if(!f)return;if(artUrl)URL.revokeObjectURL(artUrl);artUrl=URL.createObjectURL(f);artwork=new Image();artwork.onload=draw;artwork.src=artUrl;});
+play.addEventListener('click',async()=>{try{initAudio();await audioCtx.resume();await audio.play();status('Preview playing.');}catch(e){status('Could not start playback: '+e.message)}});
+stop.addEventListener('click',()=>{audio.pause();audio.currentTime=0;status('Playback stopped.');});
+$('ratio').addEventListener('change',resize);$('look').addEventListener('change',draw);$('title').addEventListener('input',draw);$('lyrics').addEventListener('input',draw);
+record.addEventListener('click',async()=>{try{if(recording){recorder.stop();return}initAudio();await audioCtx.resume();const video=canvas.captureStream(30), combined=new MediaStream([...video.getVideoTracks(),...streamDest.stream.getAudioTracks()]);const type=MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':'video/webm';recorder=new MediaRecorder(combined,{mimeType:type});chunks=[];recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.onstop=()=>{recording=false;record.textContent='Record WebM';const blob=new Blob(chunks,{type:'video/webm'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='burden-ghost-visual.webm';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);status('Recording saved as WebM. For final MP4, use the GitHub render workflow.');video.getTracks().forEach(t=>t.stop());};recorder.start(1000);recording=true;record.textContent='Finish recording';await audio.play();status('Recording in real time. Click Finish recording to export.');}catch(e){status('Recording unavailable in this browser: '+e.message)}});
+audio.addEventListener('ended',()=>{if(recording&&recorder&&recorder.state!=='inactive')recorder.stop()});
+resize();cancelAnimationFrame(raf);draw();
+})();
+</script>
+</body></html>

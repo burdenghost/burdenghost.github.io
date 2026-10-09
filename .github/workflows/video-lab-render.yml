@@ -1,0 +1,119 @@
+name: Render BURDEN GHOST music visual
+
+on:
+  workflow_dispatch:
+    inputs:
+      audio_url:
+        description: "HTTPS URL to the audio file (do not use private/unreleased material hosted publicly)"
+        required: true
+        type: string
+      artwork_url:
+        description: "HTTPS URL to cover artwork"
+        required: true
+        type: string
+      title:
+        description: "Artist / track title"
+        required: true
+        default: "BURDEN GHOST"
+        type: string
+      aspect:
+        description: "Output format"
+        required: true
+        default: "landscape"
+        type: choice
+        options:
+          - landscape
+          - portrait
+          - square
+      subtitles_url:
+        description: "Optional HTTPS URL to an SRT lyric subtitle file"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: burden-ghost-video-render-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Validate and fetch input assets
+        env:
+          AUDIO_URL: ${{ inputs.audio_url }}
+          ARTWORK_URL: ${{ inputs.artwork_url }}
+          SUBTITLES_URL: ${{ inputs.subtitles_url }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import os
+          from urllib.parse import urlparse
+          for key in ("AUDIO_URL", "ARTWORK_URL"):
+              value = os.environ[key]
+              parsed = urlparse(value)
+              if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+                  raise SystemExit(f"{key} must be a valid HTTPS URL without embedded credentials")
+          value = os.environ.get("SUBTITLES_URL", "").strip()
+          if value:
+              parsed = urlparse(value)
+              if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
+                  raise SystemExit("SUBTITLES_URL must be a valid HTTPS URL without embedded credentials")
+          PY
+          curl --fail --location --silent --show-error --proto '=https' --max-redirs 3 --max-filesize 100000000 "$AUDIO_URL" -o input-audio
+          curl --fail --location --silent --show-error --proto '=https' --max-redirs 3 --max-filesize 25000000 "$ARTWORK_URL" -o cover-image
+          if [[ -n "$SUBTITLES_URL" ]]; then
+            curl --fail --location --silent --show-error --proto '=https' --max-redirs 3 --max-filesize 2000000 "$SUBTITLES_URL" -o lyrics.srt
+          fi
+          test -s input-audio
+          test -s cover-image
+          if [[ -f lyrics.srt ]]; then
+            grep -q -- '-->' lyrics.srt
+          fi
+
+      - name: Render H.264 MP4 with audio-reactive waveform
+        env:
+          VIDEO_TITLE: ${{ inputs.title }}
+          ASPECT: ${{ inputs.aspect }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
+          python3 - <<'PY'
+          import os
+          title = ''.join(c for c in os.environ.get("VIDEO_TITLE", "BURDEN GHOST") if c.isprintable())[:100]
+          with open("title.txt", "w", encoding="utf-8") as f:
+              f.write(title)
+          PY
+          case "$ASPECT" in
+            landscape) W=1920; H=1080; WAVE_W=1500; WAVE_H=240 ;;
+            portrait) W=1080; H=1920; WAVE_W=850; WAVE_H=260 ;;
+            square) W=1080; H=1080; WAVE_W=850; WAVE_H=220 ;;
+            *) echo "Invalid aspect" >&2; exit 1 ;;
+          esac
+          INPUTS=(-i input-audio -loop 1 -framerate 30 -i cover-image)
+          FILTER="[1:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H},boxblur=22:10,eq=brightness=-0.42[bg];[0:a]showwaves=s=${WAVE_W}x${WAVE_H}:mode=line:rate=30:colors=0xE33C53,format=rgba[wave];[bg][wave]overlay=(W-w)/2:H*0.56:shortest=1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:textfile=title.txt:fontcolor=white:fontsize=$((W/26)):x=(w-text_w)/2:y=H*0.16:shadowcolor=black@0.8:shadowx=2:shadowy=2[v]"
+          if [[ -f lyrics.srt ]]; then
+            FILTER="${FILTER};[v]subtitles=lyrics.srt:force_style='FontName=DejaVu Sans,FontSize=24,PrimaryColour=&H00FFFFFF,OutlineColour=&HAA000000,BorderStyle=1,Outline=2,Shadow=1,Alignment=2,MarginV=90'[outv]"
+            MAP="[outv]"
+          else
+            MAP="[v]"
+          fi
+          ffmpeg -hide_banner -y "${INPUTS[@]}" -filter_complex "$FILTER" -map "$MAP" -map 0:a:0 -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -r 30 -c:a aac -b:a 320k -movflags +faststart -shortest burden-ghost-visual.mp4
+          ffprobe -v error -show_entries format=duration,size -show_entries stream=codec_name,width,height,sample_rate,channels -of json burden-ghost-visual.mp4 | tee render-report.json
+          test -s burden-ghost-visual.mp4
+
+      - name: Upload final video and render report
+        uses: actions/upload-artifact@v4
+        with:
+          name: burden-ghost-video-${{ inputs.aspect }}
+          path: |
+            burden-ghost-visual.mp4
+            render-report.json
+          if-no-files-found: error
+          retention-days: 7
