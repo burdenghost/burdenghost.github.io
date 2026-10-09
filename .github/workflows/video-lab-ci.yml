@@ -1,0 +1,90 @@
+name: Video Lab quality gates
+
+on:
+  pull_request:
+    paths:
+      - "video-lab/**"
+      - ".github/workflows/video-lab-ci.yml"
+      - ".github/workflows/video-lab-render.yml"
+  push:
+    branches:
+      - main
+      - video-lab-quality-gates
+    paths:
+      - "video-lab/**"
+      - ".github/workflows/video-lab-ci.yml"
+      - ".github/workflows/video-lab-render.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: video-lab-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate HTML structure and required controls
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+          p = Path("video-lab/index.html")
+          source = p.read_text(encoding="utf-8")
+          class Checker(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.ids = []
+                  self.scripts = 0
+              def handle_starttag(self, tag, attrs):
+                  attrs = dict(attrs)
+                  if "id" in attrs:
+                      self.ids.append(attrs["id"])
+                  if tag == "script":
+                      self.scripts += 1
+          parser = Checker()
+          parser.feed(source)
+          assert parser.scripts >= 1, "No script block found"
+          assert len(parser.ids) == len(set(parser.ids)), "Duplicate HTML id found"
+          required = {"track", "art", "title", "look", "ratio", "lyrics", "play", "stop", "record", "screen", "audio", "status"}
+          missing = sorted(required - set(parser.ids))
+          assert not missing, f"Missing required controls: {missing}"
+          scripts = re.findall(r"<script[^>]*>(.*?)</script>", source, re.I | re.S)
+          Path("/tmp/video-lab-inline.js").write_text("\n".join(scripts), encoding="utf-8")
+          print(f"PASS: HTML parsed; {len(parser.ids)} unique IDs; required controls present.")
+          PY
+      - name: Check browser JavaScript syntax
+        run: node --check /tmp/video-lab-inline.js
+
+  ffmpeg-render-smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg fonts-dejavu-core
+      - name: Render synthetic 3-second MP4 and validate output
+        shell: bash
+        run: |
+          set -euo pipefail
+          ffmpeg -hide_banner -loglevel error -y -f lavfi -i "sine=frequency=440:duration=3" -c:a pcm_s16le test-audio.wav
+          ffmpeg -hide_banner -loglevel error -y -f lavfi -i "color=c=black:s=640x360:r=30:d=3" -frames:v 1 test-cover.png
+          printf 'BURDEN GHOST QA TEST' > title.txt
+          ffmpeg -hide_banner -loglevel error -y -i test-audio.wav -loop 1 -framerate 30 -i test-cover.png \
+            -filter_complex "[1:v]scale=640:360:force_original_aspect_ratio=increase,crop=640:360,boxblur=22:10,eq=brightness=-0.42[bg];[0:a]showwaves=s=500x100:mode=line:rate=30:colors=0xE33C53,format=rgba[wave];[bg][wave]overlay=(W-w)/2:H*0.56:shortest=1,drawtext=fontfile=/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf:textfile=title.txt:fontcolor=white:fontsize=24:x=(w-text_w)/2:y=H*0.16:shadowcolor=black@0.8:shadowx=2:shadowy=2[v]" \
+            -map "[v]" -map 0:a:0 -c:v libx264 -preset ultrafast -crf 23 -pix_fmt yuv420p -r 30 -c:a aac -b:a 192k -movflags +faststart -shortest qa-output.mp4
+          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,pix_fmt -of csv=p=0 qa-output.mp4
+          ffprobe -v error -select_streams a:0 -show_entries stream=codec_name,sample_rate,channels -of csv=p=0 qa-output.mp4
+          DURATION="$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 qa-output.mp4)"
+          python3 - "$DURATION" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          assert 2.5 <= duration <= 3.5, f"Unexpected output duration: {duration}"
+          print(f"PASS: MP4 duration {duration:.2f}s")
+          PY
