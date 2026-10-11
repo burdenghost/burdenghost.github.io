@@ -2,6 +2,21 @@
 (function () {
   'use strict';
 
+
+  // Limit embedded track players to short previews; download links provide full MP3s.
+  document.querySelectorAll('audio.track-preview[data-preview-limit]').forEach(function (audio) {
+    const limit = Number(audio.dataset.previewLimit) || 30;
+    audio.addEventListener('timeupdate', function () {
+      if (audio.currentTime >= limit) {
+        audio.pause();
+        audio.currentTime = limit;
+      }
+    });
+    audio.addEventListener('play', function () {
+      if (audio.currentTime >= limit) audio.currentTime = 0;
+    });
+  });
+
   const year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();
 
