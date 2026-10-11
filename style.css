@@ -330,3 +330,17 @@ footer{font-size:.72rem!important}
     font-size:.7rem;
   }
 }
+
+
+/* Remastered previews and ringtone downloads */
+.audio-preview-section{margin:46px 0 54px;padding:clamp(22px,4vw,42px);border:1px solid #333;background:linear-gradient(145deg,#111,#070707);box-shadow:inset 0 0 45px #000}
+.audio-preview-section h2{margin:0 0 12px;font:700 clamp(1.8rem,4vw,3.3rem)/1 var(--display);letter-spacing:.02em}
+.preview-intro,.preview-note{max-width:760px;color:#bdbdbd;line-height:1.7}
+.preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:26px}
+.preview-track{min-width:0;padding:22px;border:1px solid #393939;background:#0b0b0b;display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.preview-track small{color:#aaa;letter-spacing:.18em;font-size:.72rem}
+.preview-track h3{margin:0;font:700 clamp(1.2rem,2.5vw,1.8rem)/1.15 var(--display)}
+.preview-track audio{width:100%;max-width:100%;accent-color:#9d202b}
+.preview-download{display:inline-flex;align-items:center;justify-content:center;text-align:center;max-width:100%;font-size:.78rem;line-height:1.4}
+.preview-note{font-size:.85rem;margin:18px 0 0}
+@media(max-width:700px){.preview-grid{grid-template-columns:1fr}.preview-track{padding:18px}.audio-preview-section{padding:22px 16px}}
