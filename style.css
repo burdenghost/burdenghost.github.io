@@ -7,4 +7,42 @@ html{scroll-behavior:smooth;background:#050505}
 body{margin:0;background:#050505;color:var(--text);font:400 18px/1.55 var(--body);position:relative}
 body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:10;background:radial-gradient(circle at center,transparent 45%,#0008 100%);mix-blend-mode:multiply}
 body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:9;opacity:.18;background:radial-gradient(ellipse at center,transparent 30%,#000 100%)}
-/* Existing styles continue below; desktop press-kit refinement is appended at end. */
+
+/* EPK hero refinement: retain the gothic identity, but keep the complete name visible. */
+.press-hero{position:relative;isolation:isolate;min-height:clamp(34rem,76vh,52rem);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:1.25rem;padding:clamp(4.5rem,10vw,9rem) clamp(1.25rem,7vw,7rem);overflow:hidden;border-bottom:1px solid #1b1b1b;background:radial-gradient(ellipse at 62% 48%,#242424 0%,#101010 36%,#050505 76%)}
+.press-hero:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,#050505 0%,#050505bb 35%,transparent 100%),radial-gradient(ellipse at 70% 55%,#ffffff0b,transparent 55%)}
+.press-hero>.eyebrow{margin:0;color:#c5c5c5;font:600 .78rem/1.4 var(--display);letter-spacing:.22em;text-transform:uppercase}
+.press-hero .hero-logo{width:100%;max-width:min(100%,76rem);min-width:0;margin:0;overflow:visible}
+.press-hero .logo-title{display:flex;flex-direction:column;align-items:flex-start;gap:0;margin:0;max-width:100%;font-family:var(--gothic);font-size:clamp(3.6rem,10.2vw,9.5rem);font-weight:700;line-height:.78;letter-spacing:-.035em;overflow-wrap:anywhere;word-break:normal;color:#f3f3f3;text-shadow:0 2px 0 #777,0 8px 28px #fff2}
+.press-hero .logo-title span{display:block;max-width:100%;white-space:nowrap}
+.press-hero .logo-title span+span{margin-top:.16em;color:#c9c9c9}
+.press-hero .tagline{max-width:38rem;margin:.2rem 0 .4rem;color:#c3c3c3;font-family:var(--body);font-size:clamp(1.05rem,1.7vw,1.35rem);line-height:1.5}
+.press-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.7rem;margin-top:.2rem;max-width:100%}
+.press-actions .btn{display:inline-flex;align-items:center;justify-content:center;min-height:3rem;padding:.85rem 1.2rem;text-align:center;white-space:normal;line-height:1.25;text-decoration:none;border:1px solid #414141;background:#0b0b0b;color:#f4f4f4;font:600 .78rem/1.25 var(--display);letter-spacing:.055em;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.press-actions .btn.primary{background:#f0f0f0;color:#090909;border-color:#f0f0f0}
+.press-actions .btn:hover{background:#262626;border-color:#888;color:#fff}
+.press-actions .btn.primary:hover{background:#d4d4d4;color:#050505}
+.press-hero a:focus-visible,header a:focus-visible,header button:focus-visible,.press-actions .btn:focus-visible{outline:2px solid #fff;outline-offset:4px}
+.press-intro,.press-highlights,.press-releases,.press-contact{padding:clamp(3.5rem,7vw,6rem) clamp(1.25rem,7vw,7rem)}
+.press-intro,.press-releases{display:grid;grid-template-columns:minmax(13rem,.8fr) minmax(0,1.2fr);gap:clamp(2rem,6vw,6rem)}
+.press-intro h2,.press-releases h2,.press-highlights h2,.press-contact h2{font-size:clamp(2rem,4.8vw,4.2rem);line-height:.98;letter-spacing:-.025em;overflow-wrap:anywhere}
+.press-copy{max-width:52rem;color:#c6c6c6}
+.press-copy p{margin:0 0 1rem}
+.press-highlights{border-top:1px solid #1b1b1b;border-bottom:1px solid #1b1b1b;background:#080808}
+.highlight-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:#282828;border:1px solid #282828}
+.highlight-grid article{min-width:0;display:flex;flex-direction:column;gap:.65rem;padding:1.3rem;background:#0b0b0b}
+.highlight-grid strong{font:700 clamp(1.4rem,2.6vw,2.35rem)/1 var(--display);overflow-wrap:anywhere}
+.highlight-grid span{font-size:.95rem;line-height:1.45;color:#aaa}
+.press-footnote{max-width:70rem;color:#929292;font-size:.88rem}
+.release-list a{display:grid;grid-template-columns:3rem minmax(0,1fr) auto;align-items:center;gap:1rem;padding:1.25rem 0;border-bottom:1px solid #2a2a2a;color:#eee;text-decoration:none}
+.release-list a span,.release-list a em{color:#999;font-size:.8rem;font-style:normal}
+.release-list a strong{overflow-wrap:anywhere}
+.release-list a:hover strong,.press-media .links a:hover{color:#fff;text-decoration:underline;text-underline-offset:.25em}
+.press-media-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(1.5rem,4vw,4rem);align-items:center}
+.press-media-grid img{display:block;width:100%;height:auto;max-height:38rem;object-fit:contain;object-position:center}
+.press-contact .links,.press-media .links{display:flex;flex-wrap:wrap;gap:.7rem}
+.press-contact .links a,.press-media .links a{display:inline-flex;padding:.75rem 1rem;border:1px solid #333;color:#eee;text-decoration:none;font-size:.85rem}
+@media(min-width:1200px){.press-hero .logo-title{font-size:clamp(8rem,10vw,10.5rem)}}
+@media(max-width:800px){.press-hero{min-height:clamp(31rem,74svh,44rem);padding:5rem clamp(1.1rem,5vw,2.5rem);gap:1.1rem}.press-hero .logo-title{font-size:clamp(3.7rem,13vw,7.3rem)}.press-intro,.press-releases{grid-template-columns:1fr;gap:1.25rem}.highlight-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.press-media-grid{grid-template-columns:1fr}.press-actions{align-items:stretch}.press-actions .btn{flex:0 1 auto}}
+@media(max-width:480px){.press-hero{min-height:34rem;padding-top:4.2rem;padding-bottom:4.2rem}.press-hero .logo-title{font-size:clamp(3.35rem,15.5vw,5.1rem);line-height:.84}.press-hero .tagline{max-width:25rem}.press-actions{width:100%;flex-direction:column;align-items:stretch}.press-actions .btn{width:100%}.highlight-grid{grid-template-columns:1fr 1fr}.highlight-grid article{padding:.9rem}.release-list a{grid-template-columns:2rem minmax(0,1fr);gap:.7rem}.release-list a em{grid-column:2}.press-intro,.press-highlights,.press-releases,.press-contact{padding-left:1.15rem;padding-right:1.15rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.press-actions .btn{transition:none}}
