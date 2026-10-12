@@ -138,3 +138,14 @@ body>header>nav>a:hover,body>header>nav>a:focus-visible{color:#fff;text-decorati
 body>header>nav>.lang-switch{padding:.45rem .65rem;border:1px solid #444;background:#111;color:#eee;cursor:pointer;font-size:.75rem}
 @media(max-width:900px){body>header{align-items:flex-start;flex-direction:column;gap:.9rem}body>header>nav{justify-content:flex-start}}
 @media(max-width:600px){body>header{padding:1rem 1.1rem}body>header>nav{gap:.55rem .9rem}body>header>nav>a,body>header>nav>a:link,body>header>nav>a:visited{font-size:.82rem}}
+
+
+/* Social links: normalize every icon, including those without HTML dimensions. */
+.connect .links{display:grid;grid-template-columns:repeat(3,minmax(0,max-content));align-items:stretch;justify-content:start;gap:.75rem}
+.connect .links a{display:inline-flex;align-items:center;justify-content:flex-start;gap:.65rem;min-width:0;min-height:3.25rem;padding:.8rem 1rem;white-space:nowrap;line-height:1.2;overflow:hidden}
+.connect .links a img{display:block!important;width:1.35rem!important;height:1.35rem!important;min-width:1.35rem!important;min-height:1.35rem!important;max-width:1.35rem!important;max-height:1.35rem!important;flex:0 0 1.35rem!important;object-fit:contain!important}
+@media(max-width:600px){
+  .connect .links{grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:.6rem}
+  .connect .links a{width:100%;min-width:0;min-height:3.1rem;padding:.7rem .75rem;gap:.55rem;font-size:.9rem}
+  .connect .links a img{width:1.25rem!important;height:1.25rem!important;min-width:1.25rem!important;min-height:1.25rem!important;max-width:1.25rem!important;max-height:1.25rem!important;flex-basis:1.25rem!important}
+}
