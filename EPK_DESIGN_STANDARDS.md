@@ -15,6 +15,15 @@ The website is an industry-facing artist hub for journalists, playlist curators,
 - Use atmosphere as supporting art direction, not at the expense of readability or navigation.
 - Keep one clear primary action, with secondary actions visually quieter.
 
+## Mobile-versus-desktop design contract
+
+- **Mobile must feel intentionally mobile-first:** readable text, compact navigation, appropriately sized media/icons, clear vertical flow, comfortable touch targets, and no oversized graphics that push useful content below the fold.
+- **Desktop must remain clean and easy to read:** use deliberate max-widths, whitespace, balanced content columns, restrained type scale, and clear visual hierarchy; do not simply stretch mobile components across a wide screen.
+- Use responsive breakpoints to change layout where appropriate, not merely scale every element uniformly. Keep icons and logos explicitly constrained with width/height/max-size rules so SVGs and external icon assets cannot expand to their intrinsic dimensions.
+- Music-platform links should be compact, consistent, and easy to identify. On phones, arrange them in a tidy grid or stack with small, aligned icons and readable labels; on desktop, keep them in a neat horizontal or wrapping row.
+- Check the homepage and EPK independently at phone, tablet, and desktop widths. A change intended for one viewport should not unexpectedly damage the other; scope rules to the relevant page or component whenever possible.
+- After CSS changes, verify actual rendered output when possible. A successful repository commit is not proof that the live site looks correct.
+
 ## Hero / wordmark rules
 
 - Never allow the artist name to be clipped, horizontally overflow, or require sideways scrolling.
