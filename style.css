@@ -119,6 +119,7 @@ main>section{scroll-margin-top:1.5rem}
 .contact-form{display:grid;gap:1rem;min-width:0}
 .form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
 .contact-form label{display:grid;gap:.4rem;color:#bbb;font-size:.85rem}
+.contact-honeypot{display:none!important;visibility:hidden!important;position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 .contact-form input,.contact-form textarea{width:100%;min-width:0;padding:.8rem;border:1px solid #444;background:#0b0b0b;color:#fff;border-radius:0}
 .contact-form textarea{min-height:8rem;resize:vertical}
 .form-note,.form-meta,.contact-status{color:#999;font-size:.82rem}
